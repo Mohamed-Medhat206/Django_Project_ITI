@@ -1,0 +1,1 @@
+# djangoday1
