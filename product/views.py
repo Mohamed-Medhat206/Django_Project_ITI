@@ -1,10 +1,43 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
+from category.models import Category
 
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'product/list.html', {'products': products})
 
-def product_detail(request, id, slug):
-    product = get_object_or_404(Product, id=id, slug=slug)
-    return render(request, 'product/detail.html', {'product': product})
+def product_create(request):
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        category = get_object_or_404(Category, pk=request.POST.get('category'))
+        Product.objects.create(
+            name=request.POST.get('name'),
+            description=request.POST.get('description'),
+            price=request.POST.get('price'),
+            stock=request.POST.get('stock'),
+            sku=request.POST.get('sku'),
+            category=category
+        )
+        return redirect('product:list')
+    return render(request, 'product/create.html', {'categories': categories})
+
+def product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        product.name = request.POST.get('name')
+        product.description = request.POST.get('description')
+        product.price = request.POST.get('price')
+        product.stock = request.POST.get('stock')
+        product.sku = request.POST.get('sku')
+        product.category = get_object_or_404(Category, pk=request.POST.get('category'))
+        product.save()
+        return redirect('product:list')
+    return render(request, 'product/edit.html', {'product': product, 'categories': categories})
+
+def product_delete(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('product:list')
+    return render(request, 'product/delete.html', {'product': product})

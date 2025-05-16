@@ -1,25 +1,28 @@
 {% extends "base.html" %}
-{% load static %}
-
-{% block title %}Categories{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/category.css' %}">
-{% endblock %}
 
 {% block content %}
-<section class="category-list">
-    <h2 class="section-title">Our Categories</h2>
-    <div class="category-grid">
+<h1>Categories</h1>
+<a href="{% url 'category:create' %}" class="btn">Add New Category</a>
+
+<table class="crud-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for category in categories %}
-        <div class="category-card">
-            <a href="{{ categories }}">
-                <div class="category-img-placeholder"></div>
-                <h3>{{ category.name }}</h3>
-                <p>{{ category.description|truncatewords:15 }}</p>
-            </a>
-        </div>
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description|truncatewords:5 }}</td>
+            <td class="actions">
+                <a href="{% url 'category:edit' category.pk %}" class="btn">Edit</a>
+                <a href="{% url 'category:delete' category.pk %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
         {% endfor %}
-    </div>
-</section>
+    </tbody>
+</table>
 {% endblock %}

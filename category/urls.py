@@ -5,5 +5,7 @@ app_name = 'category'
 
 urlpatterns = [
     path('', views.category_list, name='category_list'),
-    path('<slug:slug>/', views.category_detail, name='category_detail'),
+    path('create/', views.category_create, name='create'),
+    path('<int:pk>/edit/', views.category_edit, name='edit'),
+    path('<int:pk>/delete/', views.category_delete, name='delete'),
 ]

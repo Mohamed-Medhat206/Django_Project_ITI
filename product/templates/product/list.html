@@ -1,37 +1,32 @@
 {% extends "base.html" %}
-{% load static %}
-
-{% block title %}Products{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/product.css' %}">
-{% endblock %}
 
 {% block content %}
-<section class="product-list">
-    <h2 class="section-title">Our Products</h2>
-    <div class="product-grid">
+<h1>Products</h1>
+<a href="{% url 'product:create' %}" class="btn">Add New Product</a>
+
+<table class="crud-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for product in products %}
-        <div class="product-card">
-            <a href="{{ product.get_absolute_url }}">
-                {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
-                {% else %}
-                <div class="product-img-placeholder"></div>
-                {% endif %}
-                <div class="product-info">
-                    <h3>{{ product.name }}</h3>
-                    <p class="product-category">{{ product.category.name }}</p>
-                    <p class="product-price">${{ product.price }}</p>
-                    {% if product.stock > 0 %}
-                    <span class="stock-available">In Stock</span>
-                    {% else %}
-                    <span class="stock-out">Out of Stock</span>
-                    {% endif %}
-                </div>
-            </a>
-        </div>
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.category.name }}</td>
+            <td>${{ product.price }}</td>
+            <td>{{ product.stock }}</td>
+            <td class="actions">
+                <a href="{% url 'product:edit' product.pk %}" class="btn">Edit</a>
+                <a href="{% url 'product:delete' product.pk %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
         {% endfor %}
-    </div>
-</section>
+    </tbody>
+</table>
 {% endblock %}
