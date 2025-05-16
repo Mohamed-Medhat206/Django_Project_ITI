@@ -8,7 +8,5 @@
     <img src="{% if product.image %}{{ product.image.url }}{% endif %}" alt="{{ product.name }}" width="300">
     <p>{{ product.description }}</p>
     <p>Price: ${{ product.price }}</p>
-    <p>Stock: {{ product.stock }}</p>
-    <p>SKU: {{ product.sku }}</p>
     <p>Added: {{ product.date_added }}</p>
 {% endblock %}

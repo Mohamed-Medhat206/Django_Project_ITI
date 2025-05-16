@@ -11,7 +11,7 @@ def category_create(request):
         name = request.POST.get('name')
         description = request.POST.get('description')
         Category.objects.create(name=name, description=description)
-        return redirect('category:list')
+        return redirect('category:category_list')
     return render(request, 'category/create.html')
 
 def category_edit(request, pk):
@@ -20,12 +20,14 @@ def category_edit(request, pk):
         category.name = request.POST.get('name')
         category.description = request.POST.get('description')
         category.save()
-        return redirect('category:list')
+        return redirect('category:category_list')
     return render(request, 'category/edit.html', {'category': category})
+
+
+
 
 def category_delete(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
         category.delete()
-        return redirect('category:list')
-    return render(request, 'category/delete.html', {'category': category})
+        return redirect('category:category_list')

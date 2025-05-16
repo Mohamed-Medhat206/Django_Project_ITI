@@ -19,8 +19,10 @@
             <td>{{ category.description|truncatewords:5 }}</td>
             <td class="actions">
                 <a href="{% url 'category:edit' category.pk %}" class="btn">Edit</a>
-                <a href="{% url 'category:delete' category.pk %}" class="btn btn-danger">Delete</a>
-            </td>
+                <form method="post" action="{% url 'category:delete' category.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>            </td>
         </tr>
         {% endfor %}
     </tbody>

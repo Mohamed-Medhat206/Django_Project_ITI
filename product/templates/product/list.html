@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block title %}Products{% endblock %}
 {% block content %}
 <h1>Products</h1>
 <a href="{% url 'product:create' %}" class="btn">Add New Product</a>
@@ -7,23 +7,32 @@
 <table class="crud-table">
     <thead>
         <tr>
+            <th>Image</th>
             <th>Name</th>
             <th>Category</th>
             <th>Price</th>
-            <th>Stock</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for product in products %}
         <tr>
+            <td>
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-height: 50px;">
+                {% else %}
+                <div style="width:50px; height:50px; background:#eee; display:inline-block;"></div>
+                {% endif %}
+            </td>
             <td>{{ product.name }}</td>
             <td>{{ product.category.name }}</td>
             <td>${{ product.price }}</td>
-            <td>{{ product.stock }}</td>
             <td class="actions">
                 <a href="{% url 'product:edit' product.pk %}" class="btn">Edit</a>
-                <a href="{% url 'product:delete' product.pk %}" class="btn btn-danger">Delete</a>
+                <form method="post" action="{% url 'product:delete' product.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
