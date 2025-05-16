@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Categories{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/category.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="category-list">
+    <h2 class="section-title">Our Categories</h2>
+    <div class="category-grid">
+        {% for category in categories %}
+        <div class="category-card">
+            <a href="{{ categories }}">
+                <div class="category-img-placeholder"></div>
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.description|truncatewords:15 }}</p>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
