@@ -11,6 +11,15 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='product/imgs', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    status=models.BooleanField(default=True)
+
+
+
+    @classmethod
+    def softdelete(cls,id):
+        Product.objects.filter(pk=id).update(
+            status=False
+        )
 
     def save(self, *args, **kwargs):
         if not self.slug:

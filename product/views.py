@@ -31,7 +31,6 @@ def product_edit(request, pk):
         product.name = request.POST.get('name')
         product.description = request.POST.get('description')
         product.price = request.POST.get('price')
-        product.stock = request.POST.get('stock')
         product.category = get_object_or_404(Category, pk=request.POST.get('category'))
         
         if 'image' in request.FILES:
@@ -45,5 +44,5 @@ def product_edit(request, pk):
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
-        product.delete()
+        product.softdelete(pk)
     return redirect('product:product_list') 
