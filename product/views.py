@@ -3,8 +3,11 @@ from .models import Product
 from category.models import Category
 
 def product_list(request):
-    products = Product.objects.all()
+    products = Product.getall()
+    
     return render(request, 'product/list.html', {'products': products})
+
+
 
 def product_create(request):
     categories = Category.objects.all()
@@ -43,6 +46,5 @@ def product_edit(request, pk):
 
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    if request.method == 'POST':
-        product.softdelete(pk)
+    product.softdelete(pk)
     return redirect('product:product_list') 

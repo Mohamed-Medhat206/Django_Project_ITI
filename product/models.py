@@ -1,6 +1,8 @@
 from django.db import models
 from category.models import Category
 from django.utils.text import slugify
+from django.urls import reverse
+
 
 
 class Product(models.Model):
@@ -14,7 +16,18 @@ class Product(models.Model):
     status=models.BooleanField(default=True)
 
 
-
+    @classmethod
+    def getall(cls):
+        return cls.objects.filter(status=True)
+    
+    @classmethod
+    def get_by_id(cls,id):
+        return cls.objects.get(pk=id)
+       
+    @classmethod
+    def harddel(cls,id):
+        return cls.objects.filter(pk=id).delete()
+    
     @classmethod
     def softdelete(cls,id):
         Product.objects.filter(pk=id).update(
@@ -30,5 +43,37 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        from django.urls import reverse
         return reverse('product:product_detail', args=[self.id, self.slug])
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # @classmethod
+    # def Add(cls,name,pdate,image,catagoryid):
+    #     catagoryobj = Catagory2.get_catagory_by_id(catagoryid)
+    #     # create object of book model
+    #     Book2.objects.create(name=name,
+    #                          publish_date=pdate,
+    #                          image=image,
+    #                          catagory=catagoryobj)
+    
+    # @classmethod
+    # def update(cls,id,name,publish_date,catagory):
+    #     # #update
+    #     Book2.objects.filter(pk=id).update(
+    #         name=name,
+    #         publish_date=publish_date,
+    #         # image=req.FILES['Bimage'],
+    #         catagory=Catagory2.get_catagory_by_id(id)
+    #     )
+ 
