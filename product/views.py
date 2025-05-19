@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
+from .forms import ProductForm
 from category.models import Category
 
 def product_list(request):
@@ -7,6 +8,17 @@ def product_list(request):
     
     return render(request, 'product/list.html', {'products': products})
 
+
+def product_create_MF(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid() and form.is_bound:
+            form.save()
+            return redirect('product:product_list')
+    else:
+        form = ProductForm()
+    
+    return render(request, 'product/create_mf.html', {'form': form})
 
 
 def product_create(request):

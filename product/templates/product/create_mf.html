@@ -1,0 +1,13 @@
+<!-- product/create.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Create New Product</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Save</button>
+    <a href="{% url 'product:product_list' %}" class="btn btn-danger">Cancel</a>
+</form>
+{% endblock %}
