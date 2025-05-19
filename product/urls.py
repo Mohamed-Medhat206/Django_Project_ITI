@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import ProductListView
+from .views import ProductDeleteView
 
 app_name = 'product'
 
@@ -11,6 +12,6 @@ urlpatterns = [
     path('create_fm/', views.product_create_MF, name='create'),
     path('edit/<int:pk>/', views.product_edit, name='edit'),
     path('edit_f/<int:pk>/', views.product_edit, name='edit'),
-
-    path('delete/<int:pk>/', views.product_delete, name='delete'),
+    # path('delete/<int:pk>/', views.product_delete, name='delete'),
+    path('classdelete/<int:pk>/', ProductDeleteView.as_view(), name='delete'),
 ]

@@ -4,6 +4,8 @@ from .forms import ProductForm
 from category.models import Category
 from .forms import ProductFormHandler 
 from django.views.generic import ListView
+from django.views.generic import DeleteView
+from django.urls import reverse_lazy
 
 
 
@@ -89,3 +91,14 @@ def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.softdelete(pk)
     return redirect('product:product_list') 
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('product:product_list') 
+    
+    def delete(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        self.object.softdelete()
+        return redirect(self.get_success_url())
