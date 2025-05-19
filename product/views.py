@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from .forms import ProductForm
 from category.models import Category
+from .forms import ProductFormHandler 
+
 
 def product_list(request):
     products = Product.getall()
@@ -54,6 +56,31 @@ def product_edit(request, pk):
         product.save()
         return redirect('product:product_list')
     return render(request, 'product/edit.html', {'product': product, 'categories': categories})
+
+
+
+
+def product_edit_f(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    categories = Category.objects.all()
+    
+    if request.method == 'POST':
+        ProductFormHandler.handle_edit_form(request, product)
+        return redirect('product:product_list')
+    
+    return render(request, 'product/edit.html', {
+        'product': product,
+        'categories': categories
+    })
+
+
+
+
+
+
+
+
+
 
 
 def product_delete(request, pk):
