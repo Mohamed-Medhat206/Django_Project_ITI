@@ -3,6 +3,17 @@ from .models import Product
 from .forms import ProductForm
 from category.models import Category
 from .forms import ProductFormHandler 
+from django.views.generic import ListView
+
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = 'product/list.html'
+    context_object_name = 'products'  
+    
+    def get_queryset(self):
+        return Product.getall() 
 
 
 def product_list(request):
@@ -72,15 +83,6 @@ def product_edit_f(request, pk):
         'product': product,
         'categories': categories
     })
-
-
-
-
-
-
-
-
-
 
 
 def product_delete(request, pk):
