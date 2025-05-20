@@ -1,6 +1,17 @@
-<form method="post">
-    {% csrf_token %}
-    <p>Are you sure you want to delete "{{ object.name }}"?</p>
-    <button type="submit">Confirm</button>
-    <button><a href="{% url 'category:category_list' %}" class="btn btn-danger">Cancel</a></button>
-</form>
+{% extends 'base.html' %}
+{% block title %}Delete Category{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <h2 class="text-center" style="color: var(--accent-color);">Confirm Deletion</h2>
+    <p class="text-center">
+        Are you sure you want to delete the category <strong>{{ category.name }}</strong>?
+    </p>
+
+    <form method="post" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'category:category_list' %}" class="btn">Cancel</a>
+    </form>
+</div>
+{% endblock %}

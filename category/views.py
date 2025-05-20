@@ -31,6 +31,7 @@ def category_delete(request, pk):
     if request.method == 'POST':
         category.delete()
         return redirect('category:category_list')
+    return render(request, 'category/delete.html', {'category': category})
 
 
 
@@ -56,3 +57,5 @@ class CategoryDeleteView(DeleteView):
     model = Category
     template_name = 'category/delete.html'
     success_url = reverse_lazy('category:category_list')
+
+
