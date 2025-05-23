@@ -4,8 +4,36 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .serlizer import ProductSerlizer
 from ..models import Product
+from rest_framework.views import APIView
 
-@api_view(['GET', 'DELETE', 'PUT'])
+
+class ProductUpdateAPIView(APIView):
+    def put(self, request, pk):
+        try:
+            product = get_object_or_404(Product, pk=pk)
+            serializer = ProductSerlizer(product, data=request.data)
+            
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    {"message": "Product updated successfully"},
+                    status=status.HTTP_200_OK
+                )
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    # Add this to handle PATCH requests as well if needed
+    def patch(self, request, pk):
+        return self.put(request, pk)
+
+
+
+
+@api_view(['GET', 'DELETE'])
 def getbyid(request, id):
     product = get_object_or_404(Product, pk=id)
 
@@ -20,12 +48,6 @@ def getbyid(request, id):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'PUT':
-        serializer = ProductSerlizer(instance=product, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Product updated'}, status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])  
 def getallpro(request):

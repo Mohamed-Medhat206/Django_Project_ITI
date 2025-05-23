@@ -29,7 +29,12 @@ class ProductSerlizer(serializers.ModelSerializer):
                 {"category_id": "Invalid category ID"}
             )
 
-
+    def update(self, instance, validated_data):
+        category_id = validated_data.pop('category_id', None)
+        if category_id:
+            category = get_object_or_404(Category, pk=category_id)
+            instance.category = category
+        return super().update(instance, validated_data)
 
 
 
