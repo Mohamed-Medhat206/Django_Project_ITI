@@ -4,11 +4,14 @@ from .views import ProductListView
 from .views import ProductDeleteView
 from .api.views import *
 from rest_framework.routers import DefaultRouter
-# from .views import ProductUpdateAPIView
+
 
 app_name = 'product'
 
 urlpatterns = [
+    #api gi based
+    path('API/', ProductListCreateAPIView.as_view(), name='product-list-create'),
+    path('API/<int:pk>/', ProductDetailAPIView.as_view(), name='product-detail'),
     #api class based
     path('API/<int:pk>/', ProductUpdateAPIView.as_view(), name='product-update'),
     #api function based

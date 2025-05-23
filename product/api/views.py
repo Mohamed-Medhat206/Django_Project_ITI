@@ -5,6 +5,32 @@ from django.shortcuts import get_object_or_404
 from .serlizer import ProductSerlizer
 from ..models import Product
 from rest_framework.views import APIView
+from rest_framework import generics
+
+
+
+class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerlizer
+    lookup_field = 'pk'
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.softdelete()
+        return Response(
+            {"message": "Product deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+# GET (list), POST
+class ProductListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerlizer
+
+
+
+
+
 
 
 class ProductUpdateAPIView(APIView):
