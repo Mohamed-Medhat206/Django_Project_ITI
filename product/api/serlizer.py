@@ -37,5 +37,3 @@ class ProductSerlizer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-
-

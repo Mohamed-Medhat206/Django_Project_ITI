@@ -1,12 +1,54 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status,viewsets
 from django.shortcuts import get_object_or_404
 from .serlizer import ProductSerlizer
 from ..models import Product
 from rest_framework.views import APIView
 from rest_framework import generics
 
+
+
+class ProductViewSet(viewsets.ViewSet):
+    
+    def list(self, request):
+        products = Product.getall()
+        serializer = ProductSerlizer(products, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = ProductSerlizer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def retrieve(self, request, pk=None):
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerlizer(product)
+        return Response(serializer.data)
+    
+    def update(self, request, pk=None):
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerlizer(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def partial_update(self, request, pk=None):
+        """Partial update of a product"""
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerlizer(product, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, pk=None):
+        product = get_object_or_404(Product, pk=pk)
+        product.softdelete(pk)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -22,15 +64,9 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             status=status.HTTP_204_NO_CONTENT
         )
 
-# GET (list), POST
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerlizer
-
-
-
-
-
 
 
 class ProductUpdateAPIView(APIView):

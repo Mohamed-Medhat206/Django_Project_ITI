@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
 from .views import ProductListView
 from .views import ProductDeleteView
@@ -7,25 +7,33 @@ from rest_framework.routers import DefaultRouter
 
 
 app_name = 'product'
+router = DefaultRouter()
+router.register(r'API', ProductViewSet, basename='product')
+
 
 urlpatterns = [
-    #api gi based
-    path('API/', ProductListCreateAPIView.as_view(), name='product-list-create'),
-    path('API/<int:pk>/', ProductDetailAPIView.as_view(), name='product-detail'),
-    #api class based
-    path('API/<int:pk>/', ProductUpdateAPIView.as_view(), name='product-update'),
-    #api function based
-    path('API/<int:id>',getbyid,name='getbyid'),
-    path('API/',getallpro,name='getallpro'),
-
-
-
-    path('plistview', ProductListView.as_view(), name='product_list'),
-    path('', views.product_list, name='product_list'),
-    path('create/', views.product_create, name='create'),
-    path('create_fm/', views.product_create_MF, name='create'),
-    path('edit/<int:pk>/', views.product_edit, name='edit'),
-    path('edit_f/<int:pk>/', views.product_edit, name='edit'),
-    # path('delete/<int:pk>/', views.product_delete, name='delete'),
-    path('classdelete/<int:pk>/', ProductDeleteView.as_view(), name='delete'),
+    path('', include(router.urls)),
 ]
+
+
+# urlpatterns = [
+#     #api gi based
+#     path('API/', ProductListCreateAPIView.as_view(), name='product-list-create'),
+#     path('API/<int:pk>/', ProductDetailAPIView.as_view(), name='product-detail'),
+#     #api class based
+#     path('API/<int:pk>/', ProductUpdateAPIView.as_view(), name='product-update'),
+#     #api function based
+#     path('API/<int:id>',getbyid,name='getbyid'),
+#     path('API/',getallpro,name='getallpro'),
+
+
+
+#     path('plistview', ProductListView.as_view(), name='product_list'),
+#     path('', views.product_list, name='product_list'),
+#     path('create/', views.product_create, name='create'),
+#     path('create_fm/', views.product_create_MF, name='create'),
+#     path('edit/<int:pk>/', views.product_edit, name='edit'),
+#     path('edit_f/<int:pk>/', views.product_edit, name='edit'),
+#     # path('delete/<int:pk>/', views.product_delete, name='delete'),
+#     path('classdelete/<int:pk>/', ProductDeleteView.as_view(), name='delete'),
+# ]
